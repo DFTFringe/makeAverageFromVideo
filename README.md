@@ -11,10 +11,12 @@ Initial idea by barbidule! and discussion with chantepierre
 ## Usage
 
 ```bash
-./makeAverage.py --input <input_file> --output_dir <output dir> --select_channel <channel>
+./makeAverage.py --input <input_file> --output_dir <output dir> --select_channel <channel> --output_avg
 ```
 
-Where channel is one of `R`, `G`, or `B`.
+Where :
+- `<channel>` is one of `R`, `G`, or `B`
+- `--output_avg` is optional and will trigger the write of an `average.png` file in the output directory.
 
 ## Installation Guide
 
