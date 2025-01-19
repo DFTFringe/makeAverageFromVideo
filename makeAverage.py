@@ -30,17 +30,17 @@ def process_video(input_file, output_dir, channel, output_avg):
     if not success:
         raise ValueError("Could not read first frame")
 
-    sumImg = image[:,:,channel] * 1.0
+    sumImg = image[:,:,channel].astype(np.uint32)
 
     count = 1
     while success:
         success, image = vd.read()
         if success:
             count += 1
-            sumImg += image[:,:,channel] * 1.0
+            sumImg += image[:,:,channel]  #  * 1.0
 
-    avgImg = sumImg / (count * 1.0)
-    sumImg *= 0.0
+    avgImg = (sumImg * 1.) / (count * 1.0)
+
 
     binSize = int(np.sqrt(count))
     print(f"total {count} frames in this video. Averages over {binSize} frames")
@@ -48,25 +48,30 @@ def process_video(input_file, output_dir, channel, output_avg):
     vd.set(cv2.CAP_PROP_POS_FRAMES, 0)
 
     success, image = vd.read()
-    sumImg = image[:,:,channel] * 1.0 - avgImg
+    sumImg = image[:,:,channel].astype(np.uint32)
 
     count = 1
     while success:
         success, image = vd.read()
         if success:
             count += 1
-            sumImg += image[:,:,channel] * 1.0 - avgImg
+            sumImg += image[:,:,channel]
 
             # Save intermediate results every some frames
             if count % binSize == 0:
-                # Normalize image to 0-255 range
+
+                sumImg = (sumImg * 1.) / (binSize * 1.0)
+                sumImg -= avgImg
+                 # Normalize image to 0-255 range
                 sumImg -= np.min(sumImg)
                 if np.max(sumImg) > 0:  # Avoid division by zero
                     sumImg *= 255.0/np.max(sumImg)
 
                 output_path = Path(output_dir) / f'frame_{count}_channel_{channel}_avg.png'
                 cv2.imwrite(str(output_path), sumImg.astype(np.uint8))
-                sumImg *= 0.0
+                image *= 0
+                sumImg = image[:,:,channel] 
+
 
     if output_avg is not None:
         output_path = Path(output_dir) / 'average.png'
