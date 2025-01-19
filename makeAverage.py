@@ -3,7 +3,7 @@
 import numpy as np
 import cv2
 import argparse
-import os
+from pathlib import Path
 
 def process_video(input_file, output_dir, channel):
     """
@@ -15,7 +15,7 @@ def process_video(input_file, output_dir, channel):
         channel (int): Color channel to process (0=blue, 1=green, 2=red)
     """
     # Create output directory if it doesn't exist
-    os.makedirs(output_dir, exist_ok=True)
+    Path(output_dir).mkdir(parents=True, exist_ok=True)
     
     # First pass: compute average
     vd = cv2.VideoCapture(input_file)
@@ -62,7 +62,7 @@ def process_video(input_file, output_dir, channel):
                 if np.max(sumImg) > 0:  # Avoid division by zero
                     sumImg *= 255.0/np.max(sumImg)
                 
-                output_path = os.path.join(output_dir, f'frame_{count}_channel_{channel}_avg.png')
+                output_path = Path(output_dir) / f'frame_{count}_channel_{channel}_avg.png'
                 cv2.imwrite(output_path, sumImg.astype(np.uint8))
                 sumImg *= 0.0
 
