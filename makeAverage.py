@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import numpy as np
 import cv2
 import argparse
@@ -36,6 +38,8 @@ def process_video(input_file, output_dir, channel):
     avgImg = sumImg / (count * 1.0)
     sumImg *= 0.0
 
+    binSize = int(np.sqrt(count))
+
     vd.release()
 
     # Second pass: compute differences from average
@@ -52,7 +56,7 @@ def process_video(input_file, output_dir, channel):
             sumImg += image[:,:,channel] * 1.0 - avgImg
             
             # Save intermediate results every 100 frames
-            if count % 100 == 0:
+            if count % binSize == 0:
                 # Normalize image to 0-255 range
                 sumImg -= np.min(sumImg)
                 if np.max(sumImg) > 0:  # Avoid division by zero
@@ -66,7 +70,7 @@ def process_video(input_file, output_dir, channel):
 
 def main():
     parser = argparse.ArgumentParser(description='Process video channels and compute running averages')
-    parser.add_argument('--input', required=True, help='Input video file path')
+    parser.add_argument('--input_file', required=True, help='Input video file path')
     parser.add_argument('--output_dir', required=True, help='Output directory for processed images')
     parser.add_argument('--select_channel', type=int, choices=[0, 1, 2], required=True,
                       help='Select color channel (0=blue, 1=green, 2=red)')
@@ -74,7 +78,7 @@ def main():
     args = parser.parse_args()
     
     try:
-        process_video(args.input, args.output_dir, args.select_channel)
+        process_video(args.input_file, args.output_dir, args.select_channel)
         print(f"Processing complete. Output saved to {args.output_dir}")
     except Exception as e:
         print(f"Error processing video: {str(e)}")
