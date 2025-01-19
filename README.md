@@ -11,7 +11,7 @@ Initial idea by barbidule! and discussion with chantepierre
 ## Usage
 
 ```bash
-./makeAverage.py --input <input_file> --output_dir <output_dir> --select_channel <channel> --output_avg
+./makeAverage.py --input <input_file> --output_dir <output_dir> --select_channel {R, G, B} [--output_avg]
 ```
 
 Where :
