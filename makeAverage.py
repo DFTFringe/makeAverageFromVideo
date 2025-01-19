@@ -6,7 +6,7 @@ import argparse
 from pathlib import Path
 import time
 
-def process_video(input_file, output_dir, channel):
+def process_video(input_file, output_dir, channel, output_avg):
     """
     Process video file by computing running average and differences of a specific color channel
 
@@ -14,6 +14,7 @@ def process_video(input_file, output_dir, channel):
         input_file (str): Path to input video file
         output_dir (str): Directory to save output images
         channel (int): Color channel to process (0=blue, 1=green, 2=red)
+        output_avg (bool): Optional : also output the substracted average
     """
     start_time = time.time()
 
@@ -67,6 +68,11 @@ def process_video(input_file, output_dir, channel):
                 cv2.imwrite(str(output_path), sumImg.astype(np.uint8))
                 sumImg *= 0.0
 
+    if output_avg is not None:
+        output_path = Path(output_dir) / 'average.png'
+        print(f"Writing output noise to {output_path}")
+        cv2.imwrite(str(output_path), sumImg.astype(np.uint8))
+
     vd.release()
 
     end_time = time.time()
@@ -76,6 +82,7 @@ def main():
     parser = argparse.ArgumentParser(description='Process video channels and compute running averages')
     parser.add_argument('--input_file', required=True, help='Input video file path')
     parser.add_argument('--output_dir', required=True, help='Output directory for processed images')
+    parser.add_argument('--output_avg', type=bool, help='Whether to output a noise.png showing what was removed')
     parser.add_argument('--select_channel', type=str, choices=['B', 'G', 'R'], required=True,
                       help='Select color channel (B=blue, G=green, R=red)')
 
@@ -83,7 +90,7 @@ def main():
 
     try:
         channel_map = {'B': 0, 'G': 1, 'R': 2}
-        process_video(args.input_file, args.output_dir, channel_map[args.select_channel])
+        process_video(args.input_file, args.output_dir, channel_map[args.select_channel], args.output_avg)
         print(f"Processing complete. Output saved to {args.output_dir}")
     except Exception as e:
         print(f"Error processing video: {str(e)}")
