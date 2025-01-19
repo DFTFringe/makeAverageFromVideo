@@ -4,19 +4,22 @@ import numpy as np
 import cv2
 import argparse
 from pathlib import Path
+import time
 
 def process_video(input_file, output_dir, channel):
     """
     Process video file by computing running average and differences of a specific color channel
-    
+
     Args:
         input_file (str): Path to input video file
         output_dir (str): Directory to save output images
         channel (int): Color channel to process (0=blue, 1=green, 2=red)
     """
+    start_time = time.time()
+
     # Create output directory if it doesn't exist
     Path(output_dir).mkdir(parents=True, exist_ok=True)
-    
+
     # First pass: compute average
     vd = cv2.VideoCapture(input_file)
     if not vd.isOpened():
@@ -25,7 +28,7 @@ def process_video(input_file, output_dir, channel):
     success, image = vd.read()
     if not success:
         raise ValueError("Could not read first frame")
-        
+
     sumImg = image[:,:,channel] * 1.0
 
     count = 1
@@ -41,10 +44,7 @@ def process_video(input_file, output_dir, channel):
     binSize = int(np.sqrt(count))
     print(f"total {count} frames in this video. Averages over {binSize} frames")
 
-    vd.release()
-
-    # Second pass: compute differences from average
-    vd = cv2.VideoCapture(input_file)
+    vd.set(cv2.CAP_PROP_POS_FRAMES, 0)
 
     success, image = vd.read()
     sumImg = image[:,:,channel] * 1.0 - avgImg
@@ -55,19 +55,22 @@ def process_video(input_file, output_dir, channel):
         if success:
             count += 1
             sumImg += image[:,:,channel] * 1.0 - avgImg
-            
+
             # Save intermediate results every some frames
             if count % binSize == 0:
                 # Normalize image to 0-255 range
                 sumImg -= np.min(sumImg)
                 if np.max(sumImg) > 0:  # Avoid division by zero
                     sumImg *= 255.0/np.max(sumImg)
-                
+
                 output_path = Path(output_dir) / f'frame_{count}_channel_{channel}_avg.png'
-                cv2.imwrite(output_path, sumImg.astype(np.uint8))
+                cv2.imwrite(str(output_path), sumImg.astype(np.uint8))
                 sumImg *= 0.0
 
     vd.release()
+
+    end_time = time.time()
+    print(f"Total processing time: {end_time - start_time:.2f} seconds")
 
 def main():
     parser = argparse.ArgumentParser(description='Process video channels and compute running averages')
@@ -77,7 +80,7 @@ def main():
                       help='Select color channel (B=blue, G=green, R=red)')
 
     args = parser.parse_args()
-    
+
     try:
         channel_map = {'B': 0, 'G': 1, 'R': 2}
         process_video(args.input_file, args.output_dir, channel_map[args.select_channel])
