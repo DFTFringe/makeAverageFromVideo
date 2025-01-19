@@ -71,7 +71,7 @@ def process_video(input_file, output_dir, channel, output_avg):
     if output_avg is not None:
         output_path = Path(output_dir) / 'average.png'
         print(f"Writing output noise to {output_path}")
-        cv2.imwrite(str(output_path), sumImg.astype(np.uint8))
+        cv2.imwrite(str(output_path), avgImg.astype(np.uint8))
 
     vd.release()
 
