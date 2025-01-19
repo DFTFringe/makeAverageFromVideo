@@ -11,10 +11,12 @@ Initial idea by barbidule! and discussion with chantepierre
 ## Usage
 
 ```bash
-./makeAverage.py --input <input_file> --output_dir <output dir> --select_channel <channel> --output_avg
+./makeAverage.py --input <input_file> --output_dir <output_dir> --select_channel <channel> --output_avg
 ```
 
 Where :
+- `<input_file>` is the path of your input video. OpenCV uses ffmpeg under the hood, refer to ffmpeg for supported formats.
+- `<output_dir>` is the directory where averaged PNG files will be written.
 - `<channel>` is one of `R`, `G`, or `B`
 - `--output_avg` is optional and will trigger the write of an `average.png` file in the output directory.
 
