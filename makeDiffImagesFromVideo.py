@@ -5,7 +5,7 @@ import cv2
 import argparse
 from pathlib import Path
 import time
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 def process_video(input_file, output_dir, channel, roi_lst):
     """
