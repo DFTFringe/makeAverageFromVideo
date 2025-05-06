@@ -30,7 +30,7 @@ For each second duration of the input video two images are subtracted each to ot
 A total video duration of at least 100 seconds is a realistic value to average air currents and vibrations sources out. 
 
 ```bash
-./makeDiffImagesFromVideoe.py --input <input_file> --output_dir <output_dir> --select_channel {R, G, B} --roi_lst x y width height [--output_avg]
+./makeDiffImagesFromVideo.py --input <input_file> --output_dir <output_dir> --select_channel {R, G, B} [--roi_lst x y width height] [--output_avg]
 ```
 
 Where :
