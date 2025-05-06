@@ -10,7 +10,7 @@ Initial idea by barbidule! and discussion with chantepierre
 
 ## Usage
 
-* makeAverage.py is a very simple script that creates averages images. the size of the averaged bin is roughly the square root of the total number of frames in the input video (e.g. 10 averages for 100+ frames).
+* makeAverage.py is a very simple script that creates averages images from video. The size of the averaged bin is roughly the square root of the total number of frames in the input video (e.g. 10 averages for 100+ frames).
 
 ```bash
 ./makeAverage.py --input <input_file> --output_dir <output_dir> --select_channel {R, G, B} [--output_avg]
