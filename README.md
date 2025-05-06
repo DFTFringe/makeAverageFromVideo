@@ -23,11 +23,11 @@ Where :
 - `--output_avg` is optional and will trigger the write of an `average.png` file in the output directory.
 
 
-* makeDiffImagesFromVideo is a attempt to create useful interferograms in adverse conditions.
+* makeDiffImagesFromVideo is an attempt to create useful interferograms in adverse conditions.
 
-this script allows to select a tight region of interest (ROI) around the first interferogram in the input video to later ease the identification of two images with high spatial standard deviation within a sample duration of one second. the useful values of the ROI - x, y, width, height - are printed in the terminal for further usage.
-for each second duration of the input video two images are substracted each to other and the result is saved.
-a total video duration of at least one hundred seconds is a realistic value to average air currents and vibrations sources out. 
+This script allows to select a tight region of interest (ROI) around the first interferogram in the input video to later ease the identification of two images with high spatial standard deviation within a sample duration of one second. The useful values of the ROI - x, y, width, height - are printed in the terminal for further usage.
+For each second duration of the input video two images are subtracted each to other and the result is saved.
+A total video duration of at least 100 seconds is a realistic value to average air currents and vibrations sources out. 
 
 ```bash
 ./makeDiffImagesFromVideoe.py --input <input_file> --output_dir <output_dir> --select_channel {R, G, B} --roi_lst x y width height [--output_avg]
