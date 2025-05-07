@@ -38,7 +38,7 @@ Where :
 - `<output_dir>` is the directory where averaged PNG files will be written.
 - `<channel>` is one of `R`, `G`, or `B`
 - `--output_avg` is optional and will trigger the write of an `average.png` file in the output directory.
-- `--roi_lst` is optional and four values deining the ROI that can be in use for a serie of videos with (nearly) the same interferogram position in the image.
+- `--roi_lst` is optional and four values defining the ROI that can be used for a series of videos with (nearly) the same interferogram position in the image.
 
 
 ## Installation Guide
